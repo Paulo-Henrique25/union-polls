@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 
 import { supabase } from "@/services/supabase/client";
@@ -13,6 +13,12 @@ type Poll = {
   ends_at: string;
 };
 
+type StatusFilter =
+  | "todas"
+  | "não iniciado"
+  | "em andamento"
+  | "finalizado";
+
 function formatDate(date: string) {
   return new Date(date).toLocaleString("pt-BR", {
     day: "2-digit",
@@ -23,9 +29,10 @@ function formatDate(date: string) {
   });
 }
 
-
 export default function Home() {
   const [polls, setPolls] = useState<Poll[]>([]);
+  const [statusFilter, setStatusFilter] =
+    useState<StatusFilter>("todas");
 
   useEffect(() => {
     async function fetchPolls() {
@@ -47,8 +54,23 @@ export default function Home() {
     fetchPolls();
   }, []);
 
+  const filteredPolls = useMemo(() => {
+    if (statusFilter === "todas") {
+      return polls;
+    }
+
+    return polls.filter((poll) => {
+      const status = getPollStatus(
+        poll.starts_at,
+        poll.ends_at
+      );
+
+      return status === statusFilter;
+    });
+  }, [polls, statusFilter]);
+
   return (
-    <main className="min-h-screen bg-[#F5F7FB] p-8">
+    <main className="min-h-screen bg-[#F5F7FB] px-4 py-6 md:p-8">
       <div className="mx-auto max-w-4xl">
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
@@ -57,21 +79,44 @@ export default function Home() {
             </h1>
 
             <p className="mt-2 text-gray-500">
-              Gerencie e acompanhe votações em
-              tempo real
+              Gerencie e acompanhe votações em tempo real
             </p>
           </div>
 
           <Link
             href="/create"
-           className="w-full rounded-xl bg-[#111827] px-5 py-3 text-center font-medium text-white transition hover:opacity-90 md:w-fit"
+            className="w-full rounded-xl bg-[#111827] px-5 py-3 text-center font-medium text-white transition hover:opacity-90 md:w-fit"
           >
             Nova enquete
           </Link>
         </div>
 
+        <div className="mb-6 flex flex-wrap gap-3">
+          {[
+            "todas",
+            "não iniciado",
+            "em andamento",
+            "finalizado",
+          ].map((status) => (
+            <button
+              key={status}
+              type="button"
+              onClick={() =>
+                setStatusFilter(status as StatusFilter)
+              }
+              className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+                statusFilter === status
+                  ? "bg-[#111827] text-white"
+                  : "bg-white text-gray-600 hover:bg-gray-100"
+              }`}
+            >
+              {status}
+            </button>
+          ))}
+        </div>
+
         <div className="grid gap-5">
-          {polls.map((poll) => {
+          {filteredPolls.map((poll) => {
             const status = getPollStatus(
               poll.starts_at,
               poll.ends_at
@@ -81,7 +126,7 @@ export default function Home() {
               <Link
                 key={poll.id}
                 href={`/poll/${poll.id}`}
-               className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-gray-300 hover:shadow-lg"
+                className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-gray-300 hover:shadow-lg"
               >
                 <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                   <div>
@@ -91,19 +136,17 @@ export default function Home() {
 
                     <div className="mt-4 flex flex-col gap-1 text-sm text-gray-500">
                       <span>
-                        Início:{" "}
-                        {formatDate(poll.starts_at)}
+                        Início: {formatDate(poll.starts_at)}
                       </span>
 
                       <span>
-                        Fim:{" "}
-                        {formatDate(poll.ends_at)}
+                        Fim: {formatDate(poll.ends_at)}
                       </span>
                     </div>
                   </div>
 
                   <div
-                    className={`rounded-full px-4 py-2 text-sm font-medium
+                    className={`w-fit rounded-full px-4 py-2 text-sm font-medium
                     ${
                       status === "em andamento"
                         ? "bg-green-100 text-green-700"
