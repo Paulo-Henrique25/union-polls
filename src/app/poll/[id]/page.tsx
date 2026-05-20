@@ -145,23 +145,20 @@ export default function PollPage({
 
             <div
               className={`rounded-full px-4 py-2 text-sm font-medium
-              ${
-                status === "em andamento"
+              ${status === "em andamento"
                   ? "bg-green-100 text-green-700"
                   : ""
-              }
+                }
 
-              ${
-                status === "não iniciado"
+              ${status === "não iniciado"
                   ? "bg-yellow-100 text-yellow-700"
                   : ""
-              }
+                }
 
-              ${
-                status === "finalizado"
+              ${status === "finalizado"
                   ? "bg-red-100 text-red-700"
                   : ""
-              }
+                }
             `}
             >
               {status}
@@ -174,10 +171,10 @@ export default function PollPage({
                 totalVotes === 0
                   ? 0
                   : Math.round(
-                      (option.votes /
-                        totalVotes) *
-                        100
-                    );
+                    (option.votes /
+                      totalVotes) *
+                    100
+                  );
 
               return (
                 <button
@@ -192,10 +189,10 @@ export default function PollPage({
                       option.votes
                     )
                   }
-                  className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-5 text-left transition-all duration-300 hover:-translate-y-1 hover:border-black hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
+                 className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-5 text-left transition-all duration-300 hover:-translate-y-1 hover:border-gray-300 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   <div
-                    className="absolute left-0 top-0 h-full rounded-2xl bg-gradient-to-r from-[#111827]/10 to-[#111827]/5 transition-all duration-500"
+                    className="absolute left-0 top-0 h-full rounded-2xl bg-gradient-to-r from-[#E5E7EB] to-[#F3F4F6] transition-all duration-500"
                     style={{
                       width: `${percentage}%`,
                     }}
@@ -212,9 +209,15 @@ export default function PollPage({
                       </p>
                     </div>
 
-                    <span className="text-xl font-bold text-[#111827]">
-                      {percentage}%
-                    </span>
+                    <div className="text-right">
+                      <span className="block text-xl font-bold text-[#111827]">
+                        {percentage}%
+                      </span>
+
+                      <span className="text-sm text-gray-500">
+                        {option.votes} {option.votes === 1 ? "voto" : "votos"}
+                      </span>
+                    </div>
                   </div>
                 </button>
               );

@@ -13,6 +13,17 @@ type Poll = {
   ends_at: string;
 };
 
+function formatDate(date: string) {
+  return new Date(date).toLocaleString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+
 export default function Home() {
   const [polls, setPolls] = useState<Poll[]>([]);
 
@@ -70,9 +81,9 @@ export default function Home() {
               <Link
                 key={poll.id}
                 href={`/poll/${poll.id}`}
-                className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+               className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-gray-300 hover:shadow-lg"
               >
-                <div className="flex items-start justify-between">
+                <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                   <div>
                     <h2 className="text-2xl font-semibold text-[#111827]">
                       {poll.title}
@@ -81,16 +92,12 @@ export default function Home() {
                     <div className="mt-4 flex flex-col gap-1 text-sm text-gray-500">
                       <span>
                         Início:{" "}
-                        {new Date(
-                          poll.starts_at
-                        ).toLocaleString()}
+                        {formatDate(poll.starts_at)}
                       </span>
 
                       <span>
                         Fim:{" "}
-                        {new Date(
-                          poll.ends_at
-                        ).toLocaleString()}
+                        {formatDate(poll.ends_at)}
                       </span>
                     </div>
                   </div>

@@ -96,8 +96,8 @@ export default function CreatePollPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#F5F7FB] p-8">
-      <div className="mx-auto max-w-2xl rounded-3xl bg-white p-8 shadow-sm">
+    <main className="min-h-screen bg-[#F5F7FB] px-4 py-6 md:p-8">
+     <div className="mx-auto w-full max-w-2xl rounded-3xl bg-white p-5 shadow-sm md:p-8">
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-[#111827]">
             Criar enquete
@@ -131,7 +131,7 @@ export default function CreatePollPage() {
             )}
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2">
+         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <div>
               <label className="mb-2 block text-sm font-medium text-gray-700">
                 Data início
@@ -168,7 +168,7 @@ export default function CreatePollPage() {
                 onClick={() =>
                   append({ text: "" })
                 }
-                className="rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium transition hover:border-black"
+               className="rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium transition hover:bg-gray-100"
               >
                 Adicionar
               </button>
@@ -179,7 +179,7 @@ export default function CreatePollPage() {
                 (field, index) => (
                   <div
                     key={field.id}
-                    className="flex gap-3"
+                   className="flex flex-col gap-3 sm:flex-row"
                   >
                     <input
                       type="text"
@@ -189,7 +189,7 @@ export default function CreatePollPage() {
                       {...register(
                         `options.${index}.text`
                       )}
-                      className="flex-1 rounded-2xl border border-gray-200 px-5 py-4 outline-none transition focus:border-black"
+                      className="flex-1 rounded-2xl border border-gray-200 bg-[#F9FAFB] px-5 py-4 outline-none transition focus:border-black focus:bg-white"
                     />
 
                     {fields.length > 3 && (
@@ -198,7 +198,7 @@ export default function CreatePollPage() {
                         onClick={() =>
                           remove(index)
                         }
-                        className="rounded-2xl border border-red-200 px-4 text-red-500 transition hover:bg-red-50"
+                        className="rounded-2xl border border-red-200 px-4 py-3 text-red-500 transition hover:bg-red-50 sm:py-0"
                       >
                         Remover
                       </button>
@@ -211,7 +211,7 @@ export default function CreatePollPage() {
 
           <button
             type="submit"
-            className="mt-6 rounded-2xl bg-[#111827] py-4 text-lg font-semibold text-white transition hover:opacity-90"
+            className="mt-6 w-full rounded-2xl bg-[#111827] py-4 text-lg font-semibold text-white transition hover:opacity-90"
           >
             Criar enquete
           </button>
